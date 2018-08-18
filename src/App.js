@@ -15,6 +15,9 @@ class App extends Component {
           <p className="App-content__intro">
             In here, you can create a clip out of the default video below by seting the start and end time.
           </p>
+          <div className="App-content__clips-list">
+              Clips List
+          </div>
         </section>
       </div>
     );
