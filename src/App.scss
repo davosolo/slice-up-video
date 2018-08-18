@@ -1,20 +1,32 @@
 .App {
+  display: grid;
+  grid-template-rows: 10% 90%;
+  height: 100%;
   text-align: center;
 
   &-header {
     background-color: #222;
     color: white;
-    height: 2rem;
+    grid-row: 1 / 2;
     padding: 20px 20px 19px 20px;
   }
-
+  
   &-title {
     font-size: 2rem;
   }
-
+  
   &-content {
+    display: grid;
+    grid-row: 2 / 3;
+    grid-template-rows: 10% 90%;
+
     &__intro {
       font-size: large;
+      grid-row: 1 / 2;
+    }
+    
+    &__clips-list {
+      grid-row: 2 / -1;
     }
   }
 }
