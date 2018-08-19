@@ -1,12 +1,15 @@
 // @vendors
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {
     Card,
     CardTitle,
-    Media,
+    Media
 } from 'react-md';
+
+// @components
+import SliceFormDialog from '../slice-form-dialog';
 
 // @assets
 import sampleVideo from '../../assets/sintel_trailer-480p.mp4';
@@ -14,37 +17,67 @@ import sampleVideo from '../../assets/sintel_trailer-480p.mp4';
 // @styles
 import './style.scss';
 
-const VideoCard = props => {
-    const {
-        className,
-        endTime,
-        startTime,
-        title
-    } = props;
+class VideoCard extends PureComponent {
+    constructor(props) {
+        super(props);
 
-    return (
-        <Card className={classNames(className, 'video-card', 'md-block-centered')}>
-            <Media>
-                <video controls>
-                    <source src={`${sampleVideo}#t=${startTime},${endTime}`} />
-                </video>
-            </Media>
-            <CardTitle title={title} subtitle={`Start time: ${startTime} | End time: ${endTime}`} />
-        </Card>
-    );
+        this.state = {
+            isSliceFormDialogVisible: true
+        }
+
+        this.onClipSave = this.onClipSave.bind(this);
+        this.onHide = this.onHide.bind(this);
+    }
+
+    onClipSave(data) {
+        const { onClipSave } = this.props;
+
+        onClipSave(data);
+        this.setState({ isSliceFormDialogVisible: false });
+    };
+
+    onHide() {
+        this.setState({ isSliceFormDialogVisible: false });
+    };
+
+    render() {
+        const {
+            className,
+            endTime,
+            startTime,
+            title
+        } = this.props;
+    
+        return (
+            <Card className={classNames(className, 'video-card', 'md-block-centered')}>
+                <SliceFormDialog
+                    isSliceFormDialogVisible={this.state.isSliceFormDialogVisible}
+                    onClipSave={this.onClipSave}
+                    onHide={this.onHide}
+                />
+                <Media>
+                    <video controls>
+                        <source src={`${sampleVideo}#t=${startTime},${endTime}`} />
+                    </video>
+                </Media>
+                <CardTitle subtitle={`Start time: ${startTime} | End time: ${endTime}`} title={title} />
+            </Card>
+        );
+    }
 };
 
 VideoCard.propTypes = {
     className: PropTypes.string,
     endTime: PropTypes.string,
+    onClipSave: PropTypes.func.isRequired,
     startTime: PropTypes.string,
     title: PropTypes.string
 };
 
 VideoCard.defaultProps = {
     className: '',
-    endTime: '00:00',
-    startTime: '00:52',
+    endTime: '00:52',
+    startTime: '00:00',
     title: 'Sample Video'
 };
 
