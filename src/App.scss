@@ -20,6 +20,8 @@
     display: grid;
     grid-row: 2 / 3;
     grid-template-rows: 10% 90%;
+    height: fit-content;
+    padding-bottom: 1rem;
 
     &__intro {
       font-size: large;
