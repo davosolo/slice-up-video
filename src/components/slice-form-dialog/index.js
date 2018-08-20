@@ -4,9 +4,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames'
 import { Button, DialogContainer, TextField } from 'react-md';
 
-// @styles
-import './style.scss';
-
 class SliceFormDialog extends PureComponent {
     constructor(props) {
         super(props);

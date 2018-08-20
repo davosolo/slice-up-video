@@ -1,4 +1,21 @@
 .video-card {
-    text-align: left;
     width: 80%;
+    
+    &__title {
+        text-align: left;
+    }
+
+    &__action-buttons-container {
+        padding: 1rem;
+        text-align: right;
+
+        button {
+            height: 50px;
+            width: 50px;
+        }
+
+        .slice-button {
+            font-size: 2rem;
+        }
+    }
 }
