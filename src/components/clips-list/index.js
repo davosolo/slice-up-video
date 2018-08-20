@@ -26,27 +26,22 @@ class ClipsList extends PureComponent {
                 startTime: SAMPLE_VIDEO_START_TIME,
                 title: SAMPLE_VIDEO_TITLE
             }],
+            idCounter: 1
         };
 
         this.getClipById = this.getClipById.bind(this);
-        this.onClipSave = this.onClipSave.bind(this);
+        this.onClipDelete = this.onClipDelete.bind(this);
         this.onClipEdit = this.onClipEdit.bind(this);
+        this.onClipSave = this.onClipSave.bind(this);
     }
 
     getClipById(id) {
-        return this.state.clipsList[id];
+        return this.state.clipsList.filter(clip => clip.id === id)[0];
     }
 
-    onClipSave({ endTime, startTime, title }) {
-        const newClipsList = this.state.clipsList
-            .concat([{
-                endTime,
-                id: this.state.clipsList.length,
-                isSampleVideo: false,
-                startTime,
-                title
-            }]);
-        
+    onClipDelete(id) {
+        const newClipsList = this.state.clipsList.filter(clip => clip.id !== id);
+
         this.setState({
             clipsList: newClipsList
         });
@@ -72,6 +67,23 @@ class ClipsList extends PureComponent {
         });
     }
 
+    onClipSave({ endTime, startTime, title }) {
+        const newIdCounter = this.state.idCounter + 1;
+        const newClipsList = this.state.clipsList
+            .concat([{
+                endTime,
+                id: this.state.idCounter,
+                isSampleVideo: false,
+                startTime,
+                title
+            }]);
+        
+        this.setState({
+            clipsList: newClipsList,
+            idCounter: newIdCounter
+        });
+    }
+
     renderClipsList = () =>
         this.state.clipsList.map((clip, index) => {
             return (
@@ -81,8 +93,9 @@ class ClipsList extends PureComponent {
                     id={clip.id}
                     isSampleVideo={clip.isSampleVideo}
                     key={index}
-                    onClipSave={this.onClipSave}
+                    onClipDelete={this.onClipDelete}
                     onClipEdit={this.onClipEdit}
+                    onClipSave={this.onClipSave}
                     startTime={clip.startTime}
                     title={clip.title}
                 />

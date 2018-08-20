@@ -95,8 +95,10 @@ class VideoCard extends PureComponent {
         this.setState({ title });
     }
 
-    renderActionButtons = (isSampleVideo, id) =>
-        isSampleVideo
+    renderActionButtons = (isSampleVideo, id) => {
+        const { onClipDelete } = this.props;
+        
+        return isSampleVideo
             ? <Button
                 icon
                 onClick={() => this.onShow(null)}
@@ -105,14 +107,25 @@ class VideoCard extends PureComponent {
             >
                 <FontIcon className="slice-button">add_circle</FontIcon>
             </Button>
-            : <Button
-                icon
-                onClick={() => this.onShow(id)}
-                tooltipLabel="Edit clip"
-                primary
-            >
-                <FontIcon className="edit-button">edit</FontIcon>
-            </Button>;
+            : <div>
+                <Button
+                    icon
+                    onClick={() => this.onShow(id)}
+                    tooltipLabel="Edit clip"
+                    primary
+                >
+                    <FontIcon className="edit-button">edit</FontIcon>
+                </Button>
+                <Button
+                    icon
+                    onClick={() => onClipDelete(id)}
+                    tooltipLabel="Delete clip"
+                    primary
+                >
+                    <FontIcon className="delete-button">delete</FontIcon>
+                </Button>
+            </div>;
+    }
 
     render() {
         const {
@@ -162,8 +175,9 @@ VideoCard.propTypes = {
     getClipById: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     isSampleVideo: PropTypes.bool.isRequired,
-    onClipSave: PropTypes.func.isRequired,
+    onClipDelete: PropTypes.func.isRequired,
     onClipEdit: PropTypes.func.isRequired,
+    onClipSave: PropTypes.func.isRequired,
     startTime: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired
 };
