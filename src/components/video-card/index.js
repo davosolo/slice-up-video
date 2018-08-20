@@ -19,73 +19,137 @@ import sampleVideo from '../../assets/sintel_trailer-480p.mp4';
 // @styles
 import './style.scss';
 
+const DEFAULT_END_TIME = '00:00';
+const DEFAULT_START_TIME = '00:00';
+const DEFAULT_VIDEO_TITLE = '';
+
 class VideoCard extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
-            isSliceFormDialogVisible: false
-        }
+            endTime: DEFAULT_END_TIME,
+            isSliceFormDialogVisible: false,
+            startTime: DEFAULT_START_TIME,
+            title: DEFAULT_VIDEO_TITLE
+        };
 
         this.onClipSave = this.onClipSave.bind(this);
+        this.onClipEdit = this.onClipEdit.bind(this);
+        this.onEndTimeChange = this.onEndTimeChange.bind(this);
         this.onHide = this.onHide.bind(this);
-        this.onSliceClick = this.onSliceClick.bind(this);
+        this.onStartTimeChange = this.onStartTimeChange.bind(this);
+        this.onTitleChange = this.onTitleChange.bind(this);
     }
 
-    onClipSave(data) {
+    onClipSave() {
         const { onClipSave } = this.props;
 
-        onClipSave(data);
+        onClipSave(this.state);
         this.setState({ isSliceFormDialogVisible: false });
-    };
+    }
+
+    onClipEdit() {
+        const { id, onClipEdit } = this.props;
+
+        onClipEdit(id, this.state);
+        this.setState({ isSliceFormDialogVisible: false }, this.forceUpdate());
+    }
+
+    onEndTimeChange(endTime) {
+        this.setState({ endTime });
+    }
 
     onHide() {
         this.setState({ isSliceFormDialogVisible: false });
-    };
-
-    onSliceClick() {
-        this.setState({ isSliceFormDialogVisible: true });
     }
 
-    renderActionButtons = isSampleVideo =>
+    onStartTimeChange(startTime) {
+        this.setState({
+            startTime
+        });
+    }
+
+    onShow(id) {
+        const { getClipById } = this.props;
+        const clip = getClipById(id);
+
+        if (id) {
+            this.setState({
+                endTime: clip.endTime,
+                isSliceFormDialogVisible: true,
+                startTime: clip.startTime,
+                title: clip.title
+            });
+        } else {
+            this.setState({
+                endTime: DEFAULT_END_TIME,
+                isSliceFormDialogVisible: true,
+                startTime: DEFAULT_START_TIME,
+                title: DEFAULT_VIDEO_TITLE
+            });
+        }
+    }
+
+    onTitleChange(title) {
+        this.setState({ title });
+    }
+
+    renderActionButtons = (isSampleVideo, id) =>
         isSampleVideo
-        ? <Button
-            icon
-            onClick={this.onSliceClick}
-            tooltipLabel="Slice clip"
-            primary
-        >
-            <FontIcon className="slice-button">add_circle</FontIcon>
-        </Button>
-        : null;
+            ? <Button
+                icon
+                onClick={() => this.onShow(null)}
+                tooltipLabel="Slice clip"
+                primary
+            >
+                <FontIcon className="slice-button">add_circle</FontIcon>
+            </Button>
+            : <Button
+                icon
+                onClick={() => this.onShow(id)}
+                tooltipLabel="Edit clip"
+                primary
+            >
+                <FontIcon className="edit-button">edit</FontIcon>
+            </Button>;
 
     render() {
         const {
             className,
             endTime,
+            id,
             isSampleVideo,
             startTime,
             title
         } = this.props;
+        const source = `${sampleVideo}#t=${startTime},${endTime}`;
     
         return (
             <Card className={classNames(className, 'video-card', 'md-block-centered')}>
                 <SliceFormDialog
+                    endTime={this.state.endTime}
+                    isSampleVideo={isSampleVideo}
                     isSliceFormDialogVisible={this.state.isSliceFormDialogVisible}
-                    onClipSave={this.onClipSave}
+                    onClipSave={isSampleVideo ? this.onClipSave : this.onClipEdit}
+                    onEndTimeChange={this.onEndTimeChange}
                     onHide={this.onHide}
+                    onStartTimeChange={this.onStartTimeChange}
+                    onTitleChange={this.onTitleChange}
+                    startTime={this.state.startTime}
+                    title={this.state.title}
                 />
                 <Media>
-                    <video controls>
-                        <source src={`${sampleVideo}#t=${startTime},${endTime}`} />
-                    </video>
+                    <video key={source} controls>
+                        <source src={source} />
+                    </video>;
                 </Media>
                 <CardTitle
                     className="video-card__title"
                     subtitle={`Start time: ${startTime} | End time: ${endTime}`}
                     title={title} />
                 <div className="video-card__action-buttons-container">
-                    {this.renderActionButtons(isSampleVideo)}
+                    {this.renderActionButtons(isSampleVideo, id)}
                 </div>                
             </Card>
         );
@@ -94,20 +158,18 @@ class VideoCard extends PureComponent {
 
 VideoCard.propTypes = {
     className: PropTypes.string,
-    endTime: PropTypes.string,
-    isSampleVideo: PropTypes.bool,
-    onClipSave: PropTypes.func,
-    startTime: PropTypes.string,
-    title: PropTypes.string
+    endTime: PropTypes.string.isRequired,
+    getClipById: PropTypes.func.isRequired,
+    id: PropTypes.number.isRequired,
+    isSampleVideo: PropTypes.bool.isRequired,
+    onClipSave: PropTypes.func.isRequired,
+    onClipEdit: PropTypes.func.isRequired,
+    startTime: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
 };
 
 VideoCard.defaultProps = {
-    className: '',
-    endTime: '00:52',
-    isSampleVideo: false,
-    onClipSave: () => {},
-    startTime: '00:00',
-    title: 'Sample Video'
+    className: ''
 };
 
 export default VideoCard;
