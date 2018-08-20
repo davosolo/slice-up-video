@@ -7,11 +7,23 @@ import { Button, DialogContainer, TextField } from 'react-md';
 class SliceFormDialog extends PureComponent {
     constructor(props) {
         super(props);
+        const {
+            endTime,
+            isSampleVideo,
+            startTime,
+            title 
+        } = this.props;
 
-        this.state = {
+        this.state = isSampleVideo
+        ? {
             endTime: '00:00',
             startTime: '00:00',
             title: ''
+        }
+        : {
+            endTime,
+            startTime,
+            title
         };
 
         this.onClipSave = this.onClipSave.bind(this);
@@ -93,9 +105,13 @@ class SliceFormDialog extends PureComponent {
 
 SliceFormDialog.propTypes = {
     className: PropTypes.string,
+    endTime: PropTypes.string.isRequired,
+    isSampleVideo: PropTypes.bool.isRequired,
     isSliceFormDialogVisible: PropTypes.bool.isRequired,
     onClipSave: PropTypes.func.isRequired,
-    onHide: PropTypes.func.isRequired
+    onHide: PropTypes.func.isRequired,
+    startTime: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired
 };
 
 SliceFormDialog.defaultProps = {

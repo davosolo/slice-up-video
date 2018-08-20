@@ -24,9 +24,10 @@ class VideoCard extends PureComponent {
         super(props);
 
         this.state = {
-            isSliceFormDialogVisible: false
-        }
+            isSliceFormDialogVisible: false,
+        };
 
+        this.onClipEdit = this.onClipEdit.bind(this);
         this.onClipSave = this.onClipSave.bind(this);
         this.onHide = this.onHide.bind(this);
         this.onSliceClick = this.onSliceClick.bind(this);
@@ -37,17 +38,25 @@ class VideoCard extends PureComponent {
 
         onClipSave(data);
         this.setState({ isSliceFormDialogVisible: false });
-    };
+    }
+
+    onClipEdit(id) {
+        const { getClipById } = this.props;
+        const clip = getClipById(id);
+        this.setState({
+            isSliceFormDialogVisible: true
+        });
+    }
 
     onHide() {
         this.setState({ isSliceFormDialogVisible: false });
-    };
+    }
 
     onSliceClick() {
         this.setState({ isSliceFormDialogVisible: true });
     }
 
-    renderActionButtons = isSampleVideo =>
+    renderActionButtons = (isSampleVideo, id) =>
         isSampleVideo
         ? <Button
             icon
@@ -57,13 +66,21 @@ class VideoCard extends PureComponent {
         >
             <FontIcon className="slice-button">add_circle</FontIcon>
         </Button>
-        : null;
+        : <Button
+            icon
+            onClick={() => this.onClipEdit(id)}
+            tooltipLabel="Edit clip"
+            primary
+        >
+            <FontIcon className="edit-button">edit</FontIcon>
+        </Button>;
 
     render() {
         const {
             className,
             endTime,
             isSampleVideo,
+            id,
             startTime,
             title
         } = this.props;
@@ -71,9 +88,13 @@ class VideoCard extends PureComponent {
         return (
             <Card className={classNames(className, 'video-card', 'md-block-centered')}>
                 <SliceFormDialog
+                    endTime={endTime}
+                    isSampleVideo={isSampleVideo}
                     isSliceFormDialogVisible={this.state.isSliceFormDialogVisible}
                     onClipSave={this.onClipSave}
                     onHide={this.onHide}
+                    startTime={startTime}
+                    title={title}
                 />
                 <Media>
                     <video controls>
@@ -85,7 +106,7 @@ class VideoCard extends PureComponent {
                     subtitle={`Start time: ${startTime} | End time: ${endTime}`}
                     title={title} />
                 <div className="video-card__action-buttons-container">
-                    {this.renderActionButtons(isSampleVideo)}
+                    {this.renderActionButtons(isSampleVideo, id)}
                 </div>                
             </Card>
         );
@@ -95,7 +116,9 @@ class VideoCard extends PureComponent {
 VideoCard.propTypes = {
     className: PropTypes.string,
     endTime: PropTypes.string,
+    getClipById: PropTypes.func,
     isSampleVideo: PropTypes.bool,
+    id: PropTypes.number,
     onClipSave: PropTypes.func,
     startTime: PropTypes.string,
     title: PropTypes.string
@@ -104,7 +127,9 @@ VideoCard.propTypes = {
 VideoCard.defaultProps = {
     className: '',
     endTime: '00:52',
+    getClipById: () => {},
     isSampleVideo: false,
+    id: undefined,
     onClipSave: () => {},
     startTime: '00:00',
     title: 'Sample Video'
