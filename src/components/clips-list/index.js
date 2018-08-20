@@ -110,7 +110,7 @@ class ClipsList extends PureComponent {
         
         return (
             <Card className={classNames(className, 'clips-list', 'md-block-centered')}>
-                <CardTitle title="Clips List"/>
+                <CardTitle className="clips-list__title" title="Clips List"/>
                 {this.renderClipsList()}
             </Card>
         );

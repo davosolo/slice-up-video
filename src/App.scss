@@ -1,31 +1,45 @@
+@import '~react-md/src/scss/react-md';
+
+$md-primary-color: $md-grey-900;
+$md-secondary-color: $md-red-900;
+@include react-md-everything;
+
+@include react-md-theme-everything(
+  $md-primary-color,
+  $md-secondary-color,
+  true,
+  'dark-theme'
+);
+
 .App {
   display: grid;
-  grid-template-rows: 10% 90%;
+  grid-template-rows: 5% 90%;
   height: 100%;
   text-align: center;
 
   &-header {
-    background-color: #222;
-    color: white;
+    background-color: $md-grey-900;
     grid-row: 1 / 2;
-    padding: 20px 20px 19px 20px;
   }
   
   &-title {
-    color: white;
-    font-size: 2rem;
+    color: $md-grey-50;
+    font-size: 3rem;
+    font-weight: bold;
+    padding-top: 18px;
   }
   
   &-content {
     display: grid;
     grid-row: 2 / 3;
-    grid-template-rows: 10% 90%;
+    grid-template-rows: 15% 85%;
     height: fit-content;
     padding-bottom: 1rem;
 
     &__intro {
       font-size: large;
       grid-row: 1 / 2;
+      padding: 1rem;
     }
     
     &__clips-list {

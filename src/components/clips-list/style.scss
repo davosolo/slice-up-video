@@ -1,4 +1,15 @@
+@import '~react-md/src/scss/react-md';
+
 .clips-list {
     padding-bottom: 2rem;
     width: 60%;
+
+    &__title {
+        background-color: $md-grey-900;
+        height: 4rem;
+
+        h2 {
+            color: $md-grey-50;
+        }
+    }
 }
