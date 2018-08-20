@@ -13,15 +13,21 @@ import {
 // @components
 import SliceFormDialog from '../slice-form-dialog';
 
+// @utils
+import { validateTimeInput } from '../../utils/formUtils';
+
 // @assets
 import sampleVideo from '../../assets/sintel_trailer-480p.mp4';
 
 // @styles
 import './style.scss';
 
-const DEFAULT_END_TIME = '00:00';
-const DEFAULT_START_TIME = '00:00';
-const DEFAULT_VIDEO_TITLE = '';
+// @constants
+import {
+    DEFAULT_END_TIME,
+    DEFAULT_START_TIME,
+    DEFAULT_VIDEO_TITLE
+} from '../../utils/constants';
 
 class VideoCard extends PureComponent {
     constructor(props) {
@@ -57,7 +63,9 @@ class VideoCard extends PureComponent {
     }
 
     onEndTimeChange(endTime) {
-        this.setState({ endTime });
+        return validateTimeInput(endTime)
+            ? this.setState({ endTime })
+            : null;
     }
 
     onHide() {
@@ -65,9 +73,9 @@ class VideoCard extends PureComponent {
     }
 
     onStartTimeChange(startTime) {
-        this.setState({
-            startTime
-        });
+        return validateTimeInput(startTime)
+            ? this.setState({ startTime })
+            : null;
     }
 
     onShow(id) {
@@ -97,7 +105,7 @@ class VideoCard extends PureComponent {
 
     renderActionButtons = (isSampleVideo, id) => {
         const { onClipDelete } = this.props;
-        
+
         return isSampleVideo
             ? <Button
                 icon
