@@ -10,9 +10,12 @@ import VideoCard from '../video-card';
 // @styles
 import './style.scss';
 
-const SAMPLE_VIDEO_END_TIME = '00:52';
-const SAMPLE_VIDEO_START_TIME = '00:00';
-const SAMPLE_VIDEO_TITLE = 'Sample Video';
+// @constants
+import {
+    SAMPLE_VIDEO_END_TIME,
+    SAMPLE_VIDEO_START_TIME,
+    SAMPLE_VIDEO_TITLE
+} from '../../utils/constants';
 
 class ClipsList extends PureComponent {
     constructor(props) {
