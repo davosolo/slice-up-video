@@ -30,6 +30,7 @@ class ClipsList extends PureComponent {
 
         this.getClipById = this.getClipById.bind(this);
         this.onClipSave = this.onClipSave.bind(this);
+        this.onClipEdit = this.onClipEdit.bind(this);
     }
 
     getClipById(id) {
@@ -51,18 +52,41 @@ class ClipsList extends PureComponent {
         });
     }
 
+    onClipEdit(id, { endTime, startTime, title }) {
+        const editedClip = {
+            endTime,
+            id,
+            isSampleVideo: false,
+            startTime,
+            title
+        };
+        const reducer = (newClipsList, clip) => {
+            return clip.id === id
+                ? newClipsList.concat([editedClip])
+                : newClipsList.concat([clip]);
+        }
+
+        const newClipsList = this.state.clipsList.reduce(reducer, []);
+        this.setState({
+            clipsList: newClipsList
+        });
+    }
+
     renderClipsList = () =>
         this.state.clipsList.map((clip, index) => {
-            return (<VideoCard
-                endTime={clip.endTime}
-                getClipById={this.getClipById}
-                id={clip.id}
-                isSampleVideo={clip.isSampleVideo}
-                key={index}
-                onClipSave={this.onClipSave}
-                startTime={clip.startTime}
-                title={clip.title}
-            />);
+            return (
+                <VideoCard
+                    endTime={clip.endTime}
+                    getClipById={this.getClipById}
+                    id={clip.id}
+                    isSampleVideo={clip.isSampleVideo}
+                    key={index}
+                    onClipSave={this.onClipSave}
+                    onClipEdit={this.onClipEdit}
+                    startTime={clip.startTime}
+                    title={clip.title}
+                />
+            );
         });
 
     render() {
