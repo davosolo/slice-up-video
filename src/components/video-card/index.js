@@ -47,10 +47,23 @@ class VideoCard extends PureComponent {
         this.setState({ isSliceFormDialogVisible: true });
     }
 
+    renderActionButtons = isSampleVideo =>
+        isSampleVideo
+        ? <Button
+            icon
+            onClick={this.onSliceClick}
+            tooltipLabel="Slice clip"
+            primary
+        >
+            <FontIcon className="slice-button">add_circle</FontIcon>
+        </Button>
+        : null;
+
     render() {
         const {
             className,
             endTime,
+            isSampleVideo,
             startTime,
             title
         } = this.props;
@@ -72,14 +85,7 @@ class VideoCard extends PureComponent {
                     subtitle={`Start time: ${startTime} | End time: ${endTime}`}
                     title={title} />
                 <div className="video-card__action-buttons-container">
-                    <Button
-                        icon
-                        onClick={this.onSliceClick}
-                        tooltipLabel="Slice clip"
-                        primary
-                    >
-                        <FontIcon className="slice-button">add_circle</FontIcon>
-                    </Button>                
+                    {this.renderActionButtons(isSampleVideo)}
                 </div>                
             </Card>
         );
@@ -89,7 +95,8 @@ class VideoCard extends PureComponent {
 VideoCard.propTypes = {
     className: PropTypes.string,
     endTime: PropTypes.string,
-    onClipSave: PropTypes.func.isRequired,
+    isSampleVideo: PropTypes.bool,
+    onClipSave: PropTypes.func,
     startTime: PropTypes.string,
     title: PropTypes.string
 };
@@ -97,6 +104,8 @@ VideoCard.propTypes = {
 VideoCard.defaultProps = {
     className: '',
     endTime: '00:52',
+    isSampleVideo: false,
+    onClipSave: () => {},
     startTime: '00:00',
     title: 'Sample Video'
 };
