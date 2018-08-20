@@ -3,8 +3,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {
+    Button,
     Card,
     CardTitle,
+    FontIcon,
     Media
 } from 'react-md';
 
@@ -22,11 +24,12 @@ class VideoCard extends PureComponent {
         super(props);
 
         this.state = {
-            isSliceFormDialogVisible: true
+            isSliceFormDialogVisible: false
         }
 
         this.onClipSave = this.onClipSave.bind(this);
         this.onHide = this.onHide.bind(this);
+        this.onSliceClick = this.onSliceClick.bind(this);
     }
 
     onClipSave(data) {
@@ -39,6 +42,10 @@ class VideoCard extends PureComponent {
     onHide() {
         this.setState({ isSliceFormDialogVisible: false });
     };
+
+    onSliceClick() {
+        this.setState({ isSliceFormDialogVisible: true });
+    }
 
     render() {
         const {
@@ -60,7 +67,20 @@ class VideoCard extends PureComponent {
                         <source src={`${sampleVideo}#t=${startTime},${endTime}`} />
                     </video>
                 </Media>
-                <CardTitle subtitle={`Start time: ${startTime} | End time: ${endTime}`} title={title} />
+                <CardTitle
+                    className="video-card__title"
+                    subtitle={`Start time: ${startTime} | End time: ${endTime}`}
+                    title={title} />
+                <div className="video-card__action-buttons-container">
+                    <Button
+                        icon
+                        onClick={this.onSliceClick}
+                        tooltipLabel="Slice clip"
+                        primary
+                    >
+                        <FontIcon className="slice-button">add_circle</FontIcon>
+                    </Button>                
+                </div>                
             </Card>
         );
     }
