@@ -34,13 +34,27 @@ class ClipsList extends PureComponent {
         });
     }
 
+    renderSampleVideo = () =>
+        <VideoCard isSampleVideo onClipSave={this.onClipSave} />
+
+    renderClipsList = () =>
+        this.state.clipsList.map((clip, index) => {
+            return (<VideoCard
+                endTime={clip.endTime}
+                key={index}
+                startTime={clip.startTime}
+                title={clip.title}
+            />);
+        });
+
     render() {
         const { className } = this.props;
         
         return (
             <Card className={classNames(className, 'clips-list', 'md-block-centered')}>
                 <CardTitle title="Clips List"/>
-                <VideoCard onClipSave={this.onClipSave} />
+                {this.renderSampleVideo()}
+                {this.renderClipsList()}
             </Card>
         );
     }
