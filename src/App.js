@@ -16,7 +16,7 @@ class App extends PureComponent {
                 </header>
                 <section className="App-content">
                     <p className="App-content__intro">
-                        In here, you can create a clip out of the default video below by seting the start and end time.
+                        Hey! In this app, you can create a clip out of the default video below by seting the start and end time. Try it out!
                     </p>
                     <ClipsList className="App-content__clips-list"/>
                 </section>
